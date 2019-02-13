@@ -27,7 +27,6 @@ Git clone this directory and use in Platformio
 ###Ajust data/config.html file
 - Add an entry in sensor selection line n°75, n°112, n°149 and n°185 
 
-
 ```
 <select class="form-control" id="sel2"  onchange="autofill_capt2(this.value)">
                   <option>Non utilisé</option>
