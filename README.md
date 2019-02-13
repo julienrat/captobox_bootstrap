@@ -12,3 +12,13 @@ Git clone this directory and use in Platformio
 - Count number of sensors and change line n°3
 
 ``` const int nb_of_sensors = 6; //nombre de capteurs ``` 
+
+- Add a case and put your code inside
+
+ ```  case 5: 
+    // Capteur de test
+    Serial.print("capteur test : ");
+    value_capt[num_capt] = random(0,255);
+    Serial.println(value_capt[num_capt]);
+    break;
+    ``` 
