@@ -22,4 +22,20 @@ Git clone this directory and use in Platformio
     value_capt[num_capt] = random(0,255);
     Serial.println(value_capt[num_capt]);
     break;
-``` 
+```
+
+###Ajust data/config.html file
+- Add an entry in sensor selection line n°75, n°112, n°149 and n°185 
+
+
+```
+<select class="form-control" id="sel2"  onchange="autofill_capt2(this.value)">
+                  <option>Non utilisé</option>
+                  <option>Humidité</option>
+                  <option>Température</option>
+                  <option>Pression</option>
+                  <option>CO2</option>
+                  <option>COV</option>
+                  <option>Test</option>
+                </select>
+```
