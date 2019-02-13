@@ -22,4 +22,4 @@ Git clone this directory and use in Platformio
     value_capt[num_capt] = random(0,255);
     Serial.println(value_capt[num_capt]);
     break;
-    ``` 
+``` 
