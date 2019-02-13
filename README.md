@@ -29,13 +29,13 @@ Git clone this directory and use in Platformio
 
 ```
 <select class="form-control" id="sel2"  onchange="autofill_capt2(this.value)">
-                  <option>Non utilisé</option>
-                  <option>Humidité</option>
-                  <option>Température</option>
-                  <option>Pression</option>
-                  <option>CO2</option>
-                  <option>COV</option>
-                  <option>Test</option>
-                  <option>YOUR SENSOR</option>
+                  <option>Non utilisé</option> //0
+                  <option>Humidité</option> //1
+                  <option>Température</option> //2
+                  <option>Pression</option> //3
+                  <option>CO2</option> //4
+                  <option>COV</option> //5
+                  <option>Test</option> //6
+                  <option>YOUR SENSOR</option> //7 HERE at the end
                 </select>
 ```
