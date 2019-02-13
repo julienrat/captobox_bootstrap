@@ -15,7 +15,8 @@ Git clone this directory and use in Platformio
 
 - Add a case and put your code inside
 
- ```  case 5: 
+ ```
+ case 5: 
     // Capteur de test
     Serial.print("capteur test : ");
     value_capt[num_capt] = random(0,255);
