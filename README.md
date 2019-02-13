@@ -36,5 +36,6 @@ Git clone this directory and use in Platformio
                   <option>CO2</option>
                   <option>COV</option>
                   <option>Test</option>
+                  <option>YOUR SENSOR</option>
                 </select>
 ```
