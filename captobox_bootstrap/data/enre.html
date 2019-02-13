@@ -1,0 +1,377 @@
+<!-- Captobox Version Bootstrap
+
+Pour toute utilisation en public, merci de tweeter, facebooker ou instagrammer avec le hashtag #petitbot et de citer vos sources !
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Présentation</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <script src="jquery.min.js"></script>
+
+  <script src="bootstrap.js"></script>
+
+  <script src="Chart.bundle.min.js"></script>
+  <script src="utils.js"></script>
+  <script src="solid.min.js" ></script>
+  <script src="fontawesome.min.js" ></script>
+
+
+</head>
+
+<body onload="javascript:Init_sensor('/config')">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="navbar-toggler-icon"></span>
+    </button> <a class="navbar-brand" href="index.html">Captobox</a>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">Visualisation Live <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Enregistrement de données</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="config.html">Configuration</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="doc.html">Documentation</a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+
+      <div class="col-md-12">
+        <br>
+        <div class="row">
+
+          <div class="col-md-3">
+
+            <button id="enregistrer" type="button" class="btn btn-success" onclick= "save()" >
+              <span id="icone" class="fa fa-circle" aria-hidden="true"></span>
+            </button>
+
+            <button id="envoyer" type="button" class="btn btn-danger"  onclick= "erase_file()" >
+              <span class="fa fa-stop" aria-hidden="true"></span>
+            </button>
+
+            <button id="envoyer" type="button" class="btn " onclick= "download_csv()" >
+              <span class="fa fa-download" aria-hidden="true"></span>
+            </button>
+          </div>
+
+
+          <div class="col-md-6">
+            <label id="space" >Chargement des données enregistrées...</label>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <canvas id="line-chart" ></canvas>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <a href="http://lespetitsdebrouillards.org" target="_blank"><img src="images/logodeb.png" class="img-responsive" alt="logo des petits débrouillards" width="244" height="122"></a>
+
+  <p>
+    <small>La Captobox est sous licence CCbyNCSA Les Petits Débrouillards,  Pour toute utilisation en public, merci de tweeter, facebooker ou instagrammer avec le hashtag #captobox et de citer vos sources ! </small>
+  </p>
+</body>
+
+
+<style>
+  canvas{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+
+  }
+
+
+</style>
+
+<script>
+
+  var ip_adress='';
+  var value=[0,0];
+  var label_name=[];
+  var mini=[];
+  var maxi=[];
+  var label_capt = ['capt_1','capt_2','capt_3','capt_4'];
+
+  var units=[];
+  var index=1;
+  var save_data="false";
+
+  var mychart = new Chart(document.getElementById("line-chart"), {
+
+    type: 'line',
+
+    options: {
+      title: {
+        display: true,
+        text: 'Capteurs'
+      }
+    }
+  });
+  function download_csv() {
+  //  window.location.assign();
+    window.location.replace(ip_adress+'/data');
+  }
+  function refresh_rate(){
+    var req = new XMLHttpRequest();
+    req.open("GET", ip_adress+'/get_space', true);
+    console.log("chargement de la configuration");
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          document.getElementById('space').innerHTML = req.responseText;
+          console.log(req.responseText);
+        }
+      }
+    };
+    req.send(null);
+  }
+
+  function send_time(url) {
+    var req = new XMLHttpRequest();
+    var currentdate = new Date();
+    var datetime_h = currentdate.getHours();
+    var datetime_m = currentdate.getMinutes();
+    var datetime_s = currentdate.getSeconds();
+    var datetime_d = currentdate.getDate();
+    var datetime_M = currentdate.getMonth()+1;
+    var datetime_y = currentdate.getYear()-100;
+    req.open("GET", ip_adress+url+"?datetime_h="+datetime_h+"&datetime_m="+datetime_m+"&datetime_s="+datetime_s+"&datetime_d="+datetime_d+"&datetime_M="+datetime_M+"&datetime_y="+datetime_y, true);
+
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          console.log(req.responseText);
+        }
+      }
+    }
+    req.send(null);
+
+  }
+
+  function save() {
+
+    var req = new XMLHttpRequest();
+
+    req.open("GET", ip_adress+"/save", true);
+
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          console.log(req.responseText);
+          save_data = req.responseText;
+          if(save_data=="true"){
+            document.getElementById('enregistrer').className="btn btn-warning";
+            var element = document.getElementById("icone");
+            element.classList.toggle("fa-pause");
+          }else{
+            document.getElementById('enregistrer').className="btn btn-success";
+            var element = document.getElementById("icone");
+            element.classList.toggle("fa-circle");
+          }
+
+        }
+      }
+    }
+
+    req.send(null);
+
+  }
+  function erase_file() {
+    if(confirm("Vous êtes sur le point d'effacer le fichier de données, Continuer ?")){
+
+      var req = new XMLHttpRequest();
+
+      req.open("GET", ip_adress+"/erase_file", true);
+      req.onreadystatechange = function(){
+        if (req.readyState == 4){
+          if(req.status == 200) {
+            console.log(req.responseText);
+            document.getElementById('enregistrer').className="btn btn-success";
+            var element = document.getElementById("icone");
+            element.classList.toggle("fa-circle");
+            window.location.replace(ip_adress+'/enre.html');
+          }
+        }
+      }
+      req.send(null);
+
+    }
+
+  }
+  function addData(chart, data, num, index_capt) {
+    var currentdate = new Date();
+    var datetime =
+    + currentdate.getHours() + ":"
+    + currentdate.getMinutes() + ":"
+    + currentdate.getSeconds();
+
+    chart.data.labels[index] = datetime;
+    chart.data.datasets[num].data[index] = data;
+    chart.update();
+  }
+
+  function addData_CSV(chart,time, data1, data2, data3, data4, num, index_capt) {
+
+    chart.data.labels[index_capt] = time;
+    if(label_name[num] != 'Non utilisé'){
+      chart.data.datasets[num].data[index_capt] = data1;
+    }
+    if(label_name[num+1] != 'Non utilisé'){
+      chart.data.datasets[num+1].data[index_capt] = data2;
+    }
+    if(label_name[num+2] != 'Non utilisé'){
+      chart.data.datasets[num+2].data[index_capt] = data3;
+    }
+    if(label_name[num+3] != 'Non utilisé'){
+      chart.data.datasets[num+3].data[index_capt] = data4;
+    }
+    //
+  }
+
+
+
+
+  function Init_sensor(url) {
+
+    send_time("/set_time");
+    var req = new XMLHttpRequest();
+    req.open("GET", ip_adress+url, true);
+
+    console.log("chargement de la configuration");
+
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          var res = JSON.parse(req.responseText);
+
+          value[0]= res.sensors.capt_1.Value;
+          label_name[0]=res.sensors.capt_1.Name;
+
+
+          value[1]= res.sensors.capt_2.Value;
+          label_name[1]=res.sensors.capt_2.Name;
+
+
+          value[2]= res.sensors.capt_3.Value;
+          label_name[2]=res.sensors.capt_3.Name;
+
+
+          value[3]= res.sensors.capt_4.Value;
+          label_name[3]=res.sensors.capt_4.Name;
+
+          save_data = res.Saving;
+          if(save_data=="true"){
+            document.getElementById('enregistrer').className="btn btn-warning";
+            var element = document.getElementById("icone");
+            element.classList.toggle("fa-pause");
+          }else{
+            document.getElementById('enregistrer').className="btn btn-success";
+            var element = document.getElementById("icone");
+            element.classList.toggle("fa-circle");
+          }
+
+          for (var i=0;i<4;i++){
+
+            console.log("num dataset : "+i);
+
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var u = 0; u < 6; u++) {
+              color += letters[Math.floor(Math.random() * 16)];
+            }
+            var newDataset = {
+              label: label_name[i],
+              borderColor: color,
+              data: [],
+              fill: false
+            };
+            mychart.data.datasets.push(newDataset);
+
+
+          }
+          mychart.update();
+          console.log("tableau chargé");
+          read_csv('/data');
+          refresh_rate();
+        }
+      }
+    }
+    req.send(null);
+
+
+
+
+
+
+  }
+  function read_csv(url){ //read csv line by line and create data array
+    console.log("read csv");
+    var save_date=[];
+    var save_capt1=[];
+    var save_capt2=[];
+    var save_capt3=[];
+    var save_capt4=[];
+
+    var allTextLines = [];
+
+    req = new XMLHttpRequest();
+    req.open("GET", ip_adress+url, true);
+    //  var chrono = new Date();
+    //  var chrono_top = chrono.getSeconds();
+    //  console.log (chrono_top);
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          var res = (req.responseText);
+
+          allTextLines = res.split(/\r\n|\n/);
+
+          for (var i=index; i<allTextLines.length; i++){
+            var Lines = allTextLines[i].split(',');
+            addData_CSV(mychart,Lines[0],parseFloat(Lines[1]),parseFloat(Lines[2]),parseFloat(Lines[3]),parseFloat(Lines[4]),0,i-1);
+            index=i;
+          }
+          console.log("ajout des valeurs dans le tableau");
+
+          mychart.update();
+        }
+      }
+    }
+    req.send(null);
+
+    //mychart.options.title.text = 'new title';
+    //  console.log(chrono_top-chrono.getSeconds());
+
+  }
+
+  setInterval(function() {
+    if(save_data=="true"){
+      read_csv('/data');
+      //  get_save_status('/config');
+      refresh_rate();
+    }
+
+  },5000);
+
+
+
+</script>

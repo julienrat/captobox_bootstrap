@@ -1,0 +1,374 @@
+<!-- Captobox Version Bootstrap
+
+Pour toute utilisation en public, merci de tweeter, facebooker ou instagrammer avec le hashtag #petitbot et de citer vos sources !
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Présentation</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap.css">
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <script src="jquery.min.js"></script>
+
+  <script src="bootstrap.js"></script>
+  <script src="raphael-2.1.4.min.js"></script>
+  <script src="justgage.js"></script>
+  <script src="Chart.bundle.min.js"></script>
+  <script src="utils.js"></script>
+
+</head>
+
+<body onload="javascript:Init_sensor('/config')">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="navbar-toggler-icon"></span>
+    </button> <a class="navbar-brand" href="index.html">Captobox</a>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="index.html">Visualisation Live <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="enre.html">Enregistrement de données</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="config.html">Configuration</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="doc.html">Documentation</a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="text-center">Capteurs</h1>
+        <div class="row">
+          <div class="col-md-3">
+            <div id="capt_1" class="gauge"></div>
+
+
+          </div>
+          <div class="col-md-3">
+            <div id="capt_2" class="gauge"></div>
+
+          </div>
+          <div class="col-md-3">
+            <div id="capt_3" class="gauge"></div>
+
+          </div>
+          <div class="col-md-3">
+            <div id="capt_4" class="gauge"></div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <canvas id="line-chart" ></canvas>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <a href="http://lespetitsdebrouillards.org" target="_blank"><img src="images/logodeb.png" class="img-responsive" alt="logo des petits débrouillards" width="244" height="122"></a>
+
+  <p>
+    <small>La Captobox est sous licence CCbyNCSA Les Petits Débrouillards,  Pour toute utilisation en public, merci de tweeter, facebooker ou instagrammer avec le hashtag #captobox et de citer vos sources ! </small>
+  </p>
+</body>
+
+
+<style>
+  canvas{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+
+  }
+</style>
+
+<script>
+
+  var ip_adress='';
+  var value=[0,0];
+  var label_name=[];
+  var mini=[];
+  var maxi=[];
+  var label_capt = ['capt_1','capt_2','capt_3','capt_4'];
+  var compteur=[];
+  var units=[];
+  var index=0;
+
+
+
+
+
+  var mychart = new Chart(document.getElementById("line-chart"), {
+
+    type: 'line',
+
+    options: {
+      title: {
+        display: true,
+        text: 'Capteur'
+      }
+    }
+  });
+
+
+  function send_time(url) {
+    var req = new XMLHttpRequest();
+    var currentdate = new Date();
+    var datetime_h = currentdate.getHours();
+    var datetime_m = currentdate.getMinutes();
+    var datetime_s = currentdate.getSeconds();
+    var datetime_d = currentdate.getDate();
+    var datetime_M = currentdate.getMonth()+1;
+    var datetime_y = currentdate.getYear()-100;
+    console.log("envoi de l'heure");
+    req.open("GET", url+"?datetime_h="+datetime_h+"&datetime_m="+datetime_m+"&datetime_s="+datetime_s+"&datetime_d="+datetime_d+"&datetime_M="+datetime_M+"&datetime_y="+datetime_y, true);
+    console.log( url+"?datetime_h="+datetime_h+"&datetime_m="+datetime_m+"&datetime_s="+datetime_s+"&datetime_d="+datetime_d+"&datetime_M="+datetime_M+"&datetime_y="+datetime_y);
+
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          console.log(req.responseText);
+        }
+      }
+    }
+    req.send(null);
+
+  }
+
+  function send_position(url) {
+    var latitude;
+    var longitude;
+    if (navigator.geolocation) {
+      var timeoutVal = 10 * 1000 * 1000;
+      navigator.geolocation.watchPosition(
+        displayPosition,
+        displayError,
+        { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0 }
+      );
+    }
+    else {
+      alert("Geolocation is not supported by this browser");
+    }
+
+    function displayPosition(position) {
+      latitude=position.coords.latitude;
+      longitude=position.coords.longitude;
+      console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+      var req = new XMLHttpRequest();
+      req.open("GET", url+"/set_position?lat="+latitude+"&lon="+longitude, true);
+      console.log( url+"?latitude="+latitude+"&longitude="+longitude);
+      req.onreadystatechange = function(){
+        if (req.readyState == 4){
+          if(req.status == 200) {
+            console.log(req.responseText);
+          }
+        }
+      }
+      req.send(null);
+    }
+
+    function displayError(error) {
+      var errors = {
+        1: 'Permission denied',
+        2: 'Position unavailable',
+        3: 'Request timeout'
+      };
+      console.log("Error: " + errors[error.code]);
+    }
+
+
+
+
+    console.log("envoi de l'heure");
+
+
+
+
+  }
+
+
+
+
+  function addData(chart, data, num, index_capt) {
+    var currentdate = new Date();
+    var datetime =
+    + currentdate.getHours() + ":"
+    + currentdate.getMinutes() + ":"
+    + currentdate.getSeconds();
+    console.log(num);
+    chart.data.labels[index] = datetime;
+    chart.data.datasets[num].data[index] = data;
+    //chart.data.datasets[num].label = label_name[index_capt];
+
+    chart.update();
+  }
+
+  function get_sensor(url) {
+
+    var req = new XMLHttpRequest();
+    req.open("GET", url, true);
+
+    console.log("chargement de la configuration");
+
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          var res = JSON.parse(req.responseText);
+
+          value[0]= res.sensors.capt_1.Value;
+          label_name[0]=res.sensors.capt_1.Name;
+          mini[0]=res.sensors.capt_1.Min;
+          maxi[0]=res.sensors.capt_1.Max;
+
+          value[1]= res.sensors.capt_2.Value;
+          label_name[1]=res.sensors.capt_2.Name;
+          mini[1]=res.sensors.capt_2.Min;
+          maxi[1]=res.sensors.capt_2.Max;
+
+          value[2]= res.sensors.capt_3.Value;
+          label_name[2]=res.sensors.capt_3.Name;
+          mini[2]=res.sensors.capt_3.Min;
+          maxi[2]=res.sensors.capt_3.Max;
+
+          value[3]= res.sensors.capt_4.Value;
+          label_name[3]=res.sensors.capt_4.Name;
+          mini[3]=res.sensors.capt_4.Min;
+          maxi[3]=res.sensors.capt_4.Max;
+
+        }
+      }
+    }
+    req.send(null);
+
+  }
+
+
+  function Init_sensor(url) {
+  send_position(ip_adress);
+    var req = new XMLHttpRequest();
+    req.open("GET",ip_adress+ url, true);
+
+    console.log("chargement de la configuration");
+
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          var res = JSON.parse(req.responseText);
+
+          value[0]= res.sensors.capt_1.Value;
+          label_name[0]=res.sensors.capt_1.Name;
+          mini[0]=res.sensors.capt_1.Min;
+          maxi[0]=res.sensors.capt_1.Max;
+          units[0]=res.sensors.capt_1.Unit;
+
+          value[1]= res.sensors.capt_2.Value;
+          label_name[1]=res.sensors.capt_2.Name;
+          mini[1]=res.sensors.capt_2.Min;
+          maxi[1]=res.sensors.capt_2.Max;
+          units[1]=res.sensors.capt_2.Unit;
+
+          value[2]= res.sensors.capt_3.Value;
+          label_name[2]=res.sensors.capt_3.Name;
+          mini[2]=res.sensors.capt_3.Min;
+          maxi[2]=res.sensors.capt_3.Max;
+          units[2]=res.sensors.capt_3.Unit;
+
+          value[3]= res.sensors.capt_4.Value;
+          label_name[3]=res.sensors.capt_4.Name;
+          mini[3]=res.sensors.capt_4.Min;
+          maxi[3]=res.sensors.capt_4.Max;
+          units[3]=res.sensors.capt_4.Unit;
+
+          for (var i=0;i<4;i++){
+
+            if(label_name[i] != 'Non utilisé'){
+
+              compteur[i] = new JustGage({ //indicateur de temp
+                id: label_capt[i],
+                value: 0,
+                min: mini[i],
+                max: maxi[i],
+                title: label_name[i],
+                donut: false,
+                symbol: units[i],
+                gaugeWidthScale: 1.0,
+                counter: true,
+                hideInnerShadow: false
+              });
+              var letters = '0123456789ABCDEF';
+              var color = '#';
+              for (var u = 0; u < 6; u++) {
+                color += letters[Math.floor(Math.random() * 16)];
+              }
+              var newDataset = {
+                label: label_name[i],
+                borderColor: color,
+                data: [],
+                fill: false
+              };
+              mychart.data.datasets.push(newDataset);
+            }
+
+          }
+          mychart.update();
+          console.log("tableau chargé");
+          send_time(ip_adress+"/set_time");
+          refresh_compteur();
+        }
+      }
+
+    }
+    req.send(null);
+
+  }
+
+  function refresh_compteur(){
+    var num_chart=0;
+    for (var i=0;i<4;i++){
+
+      if(label_name[i] != 'Non utilisé'){
+
+        compteur[i].txtTitle.attr({
+          "text": label_name[i]
+        });
+        compteur[i].refresh(parseFloat(value[i]),mini[i],maxi[i]);
+        addData(mychart,parseFloat(value[i]),num_chart,i);
+        num_chart=num_chart+1;
+      }
+
+    }
+
+
+    index++;
+  }
+
+  setInterval(function() {
+    get_sensor(ip_adress+'/config');
+    refresh_compteur();
+
+
+  },3000);
+
+
+
+
+
+
+
+
+
+
+
+</script>

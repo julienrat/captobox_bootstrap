@@ -1,0 +1,49 @@
+{
+  "sensors": {
+    "capt_1": {
+      "Name": "Humidité",
+      "Value": "51.46",
+      "Min": "0",
+      "Max": "100",
+      "Unit": "%"
+    },
+    "capt_2": {
+      "Name": "Température",
+      "Value": "18.75",
+      "Min": "0",
+      "Max": "80",
+      "Unit": "°C"
+    },
+    "capt_3": {
+      "Name": "Pression",
+      "Value": "1012.68",
+      "Min": "1100",
+      "Max": "900",
+      "Unit": "hPa"
+    },
+    "capt_4": {
+      "Name": "COV",
+      "Value": "180",
+      "Min": "450",
+      "Max": "2000",
+      "Unit": "ppm"
+    },
+    "capt_5": {
+      "Name": "name",
+      "Value": "value",
+      "Min": "value_min",
+      "Max": "value_max",
+      "Unit": "value_unit"
+    }
+  },
+  "Refresh_rate": "2000",
+  "Saving": "",
+  "Is_ap": "false",
+  "Ssid": "SFR_06A8",
+  "Password": "123456789",
+  "Channel": "canal",
+  "Host": "",
+  "Feed": "feed",
+  "Login": "login_name",
+  "Streaming_Key": "key"
+}

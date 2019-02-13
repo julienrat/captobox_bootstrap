@@ -1,0 +1,511 @@
+<!-- Petitbot, sous licence libre CCbyNCSA Les Petits Débrouillards 2016-2017
+
+Le Petitbot a été conçu et imaginé par Julien Rat et Guilème, retravaillé par Antony Auffret, le CSS de la télécommande réalisé par Johann David. Adaptation du logiciel BlockCode de Zou-xuan https://github.com/zou-xuan/BlockCode par Julien Rat.
+
+La version 3 du code est disponible sur https://github.com/julienrat/petitbot
+
+Pour toute utilisation en public, merci de tweeter, facebooker ou instagrammer avec le hashtag #petitbot et de citer vos sources !
+-->
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<script>
+
+
+</script>
+<head>
+
+  <title>Configuration</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap.css">
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <script src="jquery.min.js"></script>
+  <script src="popper.js"></script>
+  <script src="bootstrap.js"></script>
+
+</head>
+<body onload="javascript:load_config()">
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-dark bg-dark">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+      <span class="navbar-toggler-icon"></span>
+    </button> <a class="navbar-brand" href="index.html">Captobox</a>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="navbar-nav">
+        <li class="nav-item ">
+          <a class="nav-link" href="index.html">Visualisation Live <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="enre.html">Enregistrement de données</a>
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link" href="config.html">Configuration</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="doc.html">Documentation</a>
+        </li>
+
+      </ul>
+    </div>
+  </nav>
+
+
+
+
+  <div class="container-fluid">
+    <label id="ip_address" >Adresse ip</label>
+
+    <div class="row">
+      <div class="col-md-12">
+        <br>
+        <h3 class="text-center">
+          Configuration de la Captobox
+        </h3>
+        <br>
+        <div class="row">
+          <div class="col-md-3">
+            <h4 class="text-center">
+              <div class="form-group">
+                <label for="sel1">Capteur 1</label>
+                <select class="form-control" id="sel1" onchange="autofill_capt1(this.value)">
+                  <option>Non utilisé</option>
+                  <option>Humidité</option>
+                  <option>Température</option>
+                  <option>Pression</option>
+                  <option>CO2</option>
+                  <option>COV</option>
+                  <option>Test</option>
+                </select>
+              </div>
+            </h4>
+            <form role="form">
+              <div class="form-group">
+                <label for="name">
+                  Min
+                </label>
+                <input type="text" class="form-control" id="min_capt1" />
+
+
+                <label for="name">
+                  Max
+                </label>
+                <input type="text" class="form-control" id="max_capt1" />
+
+                <label for="name">
+                  Unité
+                </label>
+                <input type="text" class="form-control" id="unit_capt1" />
+
+              </div>
+
+            </form>
+          </div>
+          <div class="col-md-3">
+            <h4 class="text-center">
+              <div class="form-group">
+                <label for="sel2">Capteur 2</label>
+                <select class="form-control" id="sel2"  onchange="autofill_capt2(this.value)">
+                  <option>Non utilisé</option>
+                  <option>Humidité</option>
+                  <option>Température</option>
+                  <option>Pression</option>
+                  <option>CO2</option>
+                  <option>COV</option>
+                  <option>Test</option>
+                </select>
+              </div>
+            </h4>
+            <form role="form">
+              <div class="form-group">
+                <label for="name">
+                  Min
+                </label>
+                <input type="text" class="form-control" id="min_capt2" />
+
+
+                <label for="name">
+                  Max
+                </label>
+                <input type="text" class="form-control" id="max_capt2" />
+
+                <label for="name">
+                  Unité
+                </label>
+                <input type="text" class="form-control" id="unit_capt2" />
+
+              </div>
+
+            </form>
+          </div>
+          <div class="col-md-3">
+            <h4 class="text-center">
+              <div class="form-group">
+                <label for="sel3">Capteur 3</label>
+                <select class="form-control" id="sel3"  onchange="autofill_capt3(this.value)">
+                  <option>Non utilisé</option>
+                  <option>Humidité</option>
+                  <option>Température</option>
+                  <option>Pression</option>
+                  <option>CO2</option>
+                  <option>COV</option>
+                  <option>Test</option>
+                </select>
+              </div>
+            </h4>
+            <form role="form">
+              <div class="form-group">
+                <label for="name">
+                  Min
+                </label>
+                <input type="text" class="form-control" id="min_capt3" />
+
+                <label for="name">
+                  Max
+                </label>
+                <input type="text" class="form-control" id="max_capt3" />
+
+                <label for="name">
+                  Unité
+                </label>
+                <input type="text" class="form-control" id="unit_capt3" />
+
+              </div>
+
+            </form>
+          </div>
+          <div class="col-md-3">
+            <h4 class="text-center">
+              <div class="form-group">
+                <label for="sel4">Capteur 4</label>
+                <select class="form-control" id="sel4"  onchange="autofill_capt4(this.value)">
+                  <option>Non utilisé</option>
+                  <option>Humidité</option>
+                  <option>Température</option>
+                  <option>Pression</option>
+                  <option>CO2</option>
+                  <option>COV</option>
+                  <option>Test</option>
+                </select>
+              </div>
+
+            </h4>
+            <form role="form">
+              <div class="form-group">
+                <label for="name">
+                  Min
+                </label>
+                <input type="text" class="form-control" id="min_capt4" />
+
+                <label for="name">
+                  Max
+                </label>
+                <input type="text" class="form-control" id="max_capt4" />
+
+                <label for="name">
+                  Unité
+                </label>
+                <input type="text" class="form-control" id="unit_capt4" />
+
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <label for="exampleInputPassword1">
+          Fréquence de rafraichissement de la Captobox (en millisecondes)
+        </label>
+        <input type="text" class="form-control" id="rate" onchange="refresh_rate()"/>
+      </div>
+    </div>
+  </div>
+  <br>
+    <div class="container-fluid">
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="text-center">
+        Mise en réseau
+      </h3>
+      <form role="form">
+          <br>
+          <label id="canal_label" for="exampleInputPassword1">
+            Canal
+          </label>
+          <input type="text" class="form-control" id="canal" />
+
+          <label id="ssid_label" for="ssid_input">
+            SSID du reseau Wifi
+          </label>
+          <input type="text" class="form-control" id="ssid" />
+          <label id="password_label" for="password_input">
+            Mot de passe du reseau
+          </label>
+          <input type="text" class="form-control" id="password" />
+
+
+        </div>
+
+
+    </div>
+
+
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="text-center">
+        Cloud
+      </h3>
+      <div class="dropdown">
+        <label for="exampleInputEmail1">
+          Adresse Host
+        </label>
+        <select class="form-control" id="host" onchange="autofill_cloud(this.value)">
+          <option>Non utilisé</option>
+          <option>IFTTT</option>
+          <option>Adafruit IO</option>
+          <option>MQTT</option>
+        </select>
+      </div>
+      <div class="dropdown">
+        <form role="form" id="cloud_form">
+          <label for="exampleInputPassword1">
+            Nom d'utilisateur / Login
+          </label>
+          <input type="text" class="form-control" id="login_name" />
+          <label for="exampleInputPassword1">
+            Clef Token
+          </label>
+          <input type="text" class="form-control" id="key" />
+        </form>
+      </div>
+      <br>
+      <h3 class="text-right">
+
+        <button id="envoyer" type="button" class="btn btn-danger" onclick= "write_config()" >Enregistrons</button>
+
+
+      </h3>
+    </div>
+  </div>
+  </div>
+</body>
+</html>
+
+<script>
+  var ip_adress='';
+  var sensors=["Non utilisé","Humidité","Température","Pression","CO2","COV","Test"];
+  var units=["Non utilisé","%","°C","hPa","ppm","ppb","Test"];
+  var min=["Non utilisé","10","0","300","450","125","0"];
+  var max=["Non utilisé","90","70","1100","2000","600","255"];
+
+  var clouds=["Non utilisé","Adafruit IO","IFTTT","MQTT"];
+
+  function retreive_ip(){
+    var req = new XMLHttpRequest();
+    req.open("GET", ip_adress+'/get_ip', true);
+    console.log("chargement de la configuration");
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          document.getElementById('ip_address').innerHTML ="Connecté au réseau Local : <br> " + req.responseText;
+          console.log(req.responseText);
+        }
+      }
+    };
+    req.send(null);
+  }
+
+  function autofill_capt1(value){
+    for (var i=0;i<sensors.length ;i++){
+      if(value==sensors[i]){
+        var element = document.getElementById("unit_capt1");
+        element.value = units[i];
+        var element = document.getElementById("max_capt1");
+        element.value = max[i];
+        var element = document.getElementById("min_capt1");
+        element.value = min[i];
+      }
+    }
+  }
+
+  function autofill_capt2(value){
+    for (var i=0;i<sensors.length ;i++){
+      if(value==sensors[i]){
+        var element = document.getElementById("unit_capt2");
+        element.value = units[i];
+        var element = document.getElementById("max_capt2");
+        element.value = max[i];
+        var element = document.getElementById("min_capt2");
+        element.value = min[i];
+      }
+    }
+  }
+
+  function autofill_capt3(value){
+    for (var i=0;i<sensors.length ;i++){
+      if(value==sensors[i]){
+        var element = document.getElementById("unit_capt3");
+        element.value = units[i];
+        var element = document.getElementById("max_capt3");
+        element.value = max[i];
+        var element = document.getElementById("min_capt3");
+        element.value = min[i];
+      }
+    }
+  }
+  
+  function autofill_capt4(value){
+    for (var i=0;i<sensors.length ;i++){
+      if(value==sensors[i]){
+        var element = document.getElementById("unit_capt4");
+        element.value = units[i];
+        var element = document.getElementById("max_capt4");
+        element.value = max[i];
+        var element = document.getElementById("min_capt4");
+        element.value = min[i];
+      }
+    }
+  }
+  function autofill_cloud(value){
+    for (var i=0;i<clouds.length ;i++){
+      if(value==clouds[i]){
+        console.log(value);
+        if(value="Adafruit IO"){
+          document.getElementById('rate').value = "15000";
+        }
+      }
+    }
+  }
+
+
+
+  function ap_mode_refresh(){
+    document.getElementById('canal').hidden=true;
+    document.getElementById('canal_label').hidden =true;
+  }
+  function refresh_rate(){
+    var req = new XMLHttpRequest();
+    req.open("GET", ip_adress+'/get_space', true);
+    console.log("chargement de la configuration");
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          document.getElementById('space').innerHTML = req.responseText;
+          console.log(req.responseText);
+        }
+      }
+    };
+    req.send(null);
+  }
+
+  function load_config(){
+    var req = new XMLHttpRequest();
+    req.open("GET", ip_adress+'/config', true);
+    console.log("chargement de la configuration");
+    req.onreadystatechange = function(){
+      if (req.readyState == 4){
+        if(req.status == 200) {
+          var res = JSON.parse(req.responseText);
+          document.getElementById('ssid').value = res.Ssid;
+          document.getElementById('password').value = res.Password;
+          document.getElementById('rate').value = res.Refresh_rate;
+          document.getElementById('canal').value = res.Channel;
+
+          document.getElementById('host').value = res.Host;
+          //document.getElementById('feed').value = res.Feed;
+          document.getElementById('login_name').value = res.Login;
+          document.getElementById('key').value = res.Streaming_Key;
+          document.getElementById('sel1').value=res.sensors.capt_1.Name;
+          document.getElementById('min_capt1').value=res.sensors.capt_1.Min;
+          document.getElementById('max_capt1').value=res.sensors.capt_1.Max;
+          document.getElementById('unit_capt1').value=res.sensors.capt_1.Unit;
+
+          document.getElementById('sel2').value=res.sensors.capt_2.Name;
+          document.getElementById('min_capt2').value=res.sensors.capt_2.Min;
+          document.getElementById('max_capt2').value=res.sensors.capt_2.Max;
+          document.getElementById('unit_capt2').value=res.sensors.capt_2.Unit;
+
+          document.getElementById('sel3').value=res.sensors.capt_3.Name;
+          document.getElementById('min_capt3').value=res.sensors.capt_3.Min;
+          document.getElementById('max_capt3').value=res.sensors.capt_3.Max;
+          document.getElementById('unit_capt3').value=res.sensors.capt_3.Unit;
+
+          document.getElementById('sel4').value=res.sensors.capt_4.Name;
+          document.getElementById('min_capt4').value=res.sensors.capt_4.Min;
+          document.getElementById('max_capt4').value=res.sensors.capt_4.Max;
+          document.getElementById('unit_capt4').value=res.sensors.capt_4.Unit;
+
+          //document.getElementById('is_ap').value=res.Is_ap;
+
+
+        }
+      }
+    };
+    req.send(null);
+    ap_mode_refresh();
+    retreive_ip();
+  }
+
+  function write_config(){
+    console.log("Ecriture de la configuration");
+    var xh_serveur = new XMLHttpRequest();
+    var ssid =  document.getElementById('ssid').value;
+    var password =  document.getElementById('password').value;
+    var rate = document.getElementById('rate').value;
+    var host = document.getElementById('host').value;
+    var feed = 0;//document.getElementById('feed').value;
+    var canal = document.getElementById('canal').value;
+    var key =  document.getElementById('key').value;
+    var login_name =  document.getElementById('login_name').value;
+    //  var is_ap = document.getElementById('is_ap').checked;
+    var is_ap = "NULL";
+    var name_capt1 = document.getElementById('sel1').value;
+    var min_capt1 = document.getElementById('min_capt1').value;
+    var max_capt1 = document.getElementById('max_capt1').value;
+    var unit_capt1 = document.getElementById('unit_capt1').value;
+
+    var name_capt2 = document.getElementById('sel2').value;
+    var min_capt2 = document.getElementById('min_capt2').value;
+    var max_capt2 = document.getElementById('max_capt2').value;
+    var unit_capt2 = document.getElementById('unit_capt2').value;
+
+    var name_capt3 = document.getElementById('sel3').value;
+    var min_capt3 = document.getElementById('min_capt3').value;
+    var max_capt3 = document.getElementById('max_capt3').value;
+    var unit_capt3 = document.getElementById('unit_capt3').value;
+
+    var name_capt4 = document.getElementById('sel4').value;
+    var min_capt4 = document.getElementById('min_capt4').value;
+    var max_capt4 = document.getElementById('max_capt4').value;
+    var unit_capt4 = document.getElementById('unit_capt4').value;
+
+  //  console.log(is_ap);
+    var post_config=ip_adress+'/write?name_capt_1='+name_capt1+'&value_min_capt_1='+min_capt1+'&value_max_capt_1='+max_capt1+'&value_unit_capt_1='+unit_capt1+
+    '&name_capt_2='+name_capt2+'&value_min_capt_2='+min_capt2+'&value_max_capt_2='+max_capt2+'&value_unit_capt_2='+unit_capt2+
+    '&name_capt_3='+name_capt3+'&value_min_capt_3='+min_capt3+'&value_max_capt_3='+max_capt3+'&value_unit_capt_3='+unit_capt3+
+    '&name_capt_4='+name_capt4+'&value_min_capt_4='+min_capt4+'&value_max_capt_4='+max_capt4+'&value_unit_capt_4='+unit_capt4+
+    '&ssid='+ssid+'&ap_mode='+is_ap+'&pwd='+password+'&rate='+rate+'&host='+host+'&feed='+feed+'&canal='+canal+'&key='+key+'&login_name='+login_name;
+    xh_serveur.open("GET", post_config, true);
+    xh_serveur.onreadystatechange = function(){
+      if (xh_serveur.readyState == 4){
+        if(xh_serveur.status == 200) {
+          console.log("redemarrage");
+            window.location.replace(ip_adress+'/index.html');
+          }
+        }
+    };
+    xh_serveur.send(null);
+
+  }
+
+</script>

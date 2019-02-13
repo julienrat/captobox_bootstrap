@@ -1,0 +1,11 @@
+creation d'un dashboard :
+curl -X POST "https://io.adafruit.com/api/v2/congeloswitch/dashboards" -H  "accept: application/json" -H  "X-AIO-Key: 1bd2826c97004f5aa8efd418b76d803d" -H  "Content-Type: application/json" -d "{  \"name\": \"Captobox\",  \"description\": \"string\",  \"key\": \"1bd2826c97004f5aa8efd418b76d803d\"}"
+
+creation d'un Feed
+curl -X POST "https://io.adafruit.com/api/v2/congeloswitch/feeds" -H  "accept: application/json" -H  "X-AIO-Key: 1bd2826c97004f5aa8efd418b76d803d" -H  "Content-Type: application/json" -d "{  \"name\": \"temperature\",  \"key\": \"1234\",  \"description\": \"string\",  \"license\": \"string\"}"
+
+ajout de données
+curl -X POST "https://io.adafruit.com/api/v2/congeloswitch/feeds/temperature/data" -H  "accept: application/json" -H  "X-AIO-Key: 1bd2826c97004f5aa8efd418b76d803d" -H  "Content-Type: application/json" -d "{  \"value\": \"12,26\",  \"created_at\": \"12:34:9\",  \"lat\": \"string\",  \"lon\": \"string\",  \"ele\": \"string\",  \"epoch\": 0}"
+
+creation de blocks
+curl -X POST "https://io.adafruit.com/api/v2/congeloswitch/dashboards/captobox/blocks" -H  "accept: application/json" -H  "X-AIO-Key: 1bd2826c97004f5aa8efd418b76d803d" -H  "Content-Type: application/json" -d "{  \"name\": \"suh\",  \"description\": \"string\",  \"key\": \"string\",  \"dashboard_id\": \"captobox\",  \"visual_type\": \"line_chart\",  \"column\": 100,  \"row\": 1,  \"size_x\": 0,  \"size_y\": 0,    \"block_feeds\": [    {      \"feed_id\": \"kikou\",      \"group_id\": \"string\"    }  ],  \"properties\": {  \"historyHours\":0}}"
