@@ -2,6 +2,10 @@
 New version of captobox
 
 Git clone this directory and use in Platformio
+## Installation
+Copy paste this repo in your platformio project directory
+- upload program
+- upload data to Spiffs
 
 ## Adding sensor
 ### Create definitions in sensor.h
